@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Layout & Easy Demonlist</title>
+  <title>GD Layout & Easy Demonlist</title>
   <style>
     :root {
       --bg-color: #0d0f12;
@@ -11,148 +11,358 @@
       --accent: #2196f3;
       --text: #ffffff;
       --text-dim: #9ea8b6;
+      --border: #2a2e39;
     }
 
-    body {
-      font-family: Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text);
-      margin: 0;
-      padding: 0;
+    [data-theme="light"] {
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --accent: #0066cc;
+      --text: #1a1a1a;
+      --text-dim: #666666;
+      --border: #e0e0e0;
     }
 
-    header {
-      background: #111318;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 3px solid var(--accent);
+    [data-theme="cyberpunk"] {
+      --bg-color: #0f051d;
+      --card-bg: #1d0c36;
+      --accent: #ff007f;
+      --text: #00f6ff;
+      --text-dim: #b57edc;
+      --border: #ff007f;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      letter-spacing: 1px;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text); transition: all 0.3s ease; }
+    
+    header { background: var(--card-bg); padding: 15px 30px; border-bottom: 3px solid var(--accent); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+    .brand h1 { font-size: 1.6rem; color: var(--accent); }
+    .brand p { font-size: 0.85rem; color: var(--text-dim); }
 
-    header p {
-      margin: 5px 0 0;
-      color: var(--text-dim);
-    }
+    nav { display: flex; gap: 10px; align-items: center; }
+    button, .btn { background: var(--accent); color: #fff; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
+    button:hover { opacity: 0.85; }
+    .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    
+    .container { max-width: 1000px; margin: 25px auto; padding: 0 15px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-    .container {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 0 15px;
-    }
+    /* Cards & Lists */
+    .level-card, .stat-card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 15px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .rank { font-size: 1.4rem; font-weight: bold; color: var(--accent); width: 45px; }
+    .details h3 { margin-bottom: 4px; }
+    .details p { font-size: 0.85rem; color: var(--text-dim); }
+    .meta { text-align: right; }
+    .points { font-weight: bold; color: var(--accent); }
 
-    .level-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+    /* Admin & Forms */
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-dim); }
+    .form-group input, .form-group select { width: 100%; padding: 10px; background: var(--bg-color); border: 1px solid var(--border); color: var(--text); border-radius: 5px; }
+    .admin-panel, .auth-box { background: var(--card-bg); border: 1px solid var(--border); padding: 25px; border-radius: 8px; margin-bottom: 20px; }
 
-    .level-card {
-      background-color: var(--card-bg);
-      border-radius: 8px;
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    }
-
-    .level-info {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .rank {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--accent);
-      width: 45px;
-    }
-
-    .details h3 {
-      margin: 0 0 5px 0;
-    }
-
-    .details p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--text-dim);
-    }
-
-    .meta {
-      text-align: right;
-    }
-
-    .points {
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
-
-    .level-id {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-    }
+    /* Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
+    .modal.active { display: flex; }
+    .modal-content { background: var(--card-bg); padding: 30px; border-radius: 8px; width: 100%; max-width: 400px; border: 1px solid var(--border); }
+    
+    .badge-admin { background: #e91e63; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; vertical-align: middle; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Layout & Easy Demonlist</h1>
-    <p>Official rankings for Layouts and Easy Demons</p>
+    <div class="brand">
+      <h1 id="site-title">Layout & Easy Demonlist</h1>
+      <p id="site-subtitle">Official rankings and player stat tracker</p>
+    </div>
+    <nav>
+      <button class="btn-secondary" onclick="switchTab('list')">Demon List</button>
+      <button class="btn-secondary" onclick="switchTab('stats')">Player Stats</button>
+      <button id="admin-nav-btn" class="btn-secondary" style="display:none;" onclick="switchTab('admin')">Admin Panel</button>
+      
+      <select id="theme-select" class="btn-secondary" onchange="changeTheme(this.value)">
+        <option value="dark">Dark Theme</option>
+        <option value="light">Light Theme</option>
+        <option value="cyberpunk">Cyberpunk</option>
+      </select>
+
+      <div id="auth-buttons">
+        <button onclick="openAuthModal('login')">Login</button>
+        <button class="btn-secondary" onclick="openAuthModal('signup')">Sign Up</button>
+      </div>
+      <div id="user-info" style="display:none;">
+        <span id="user-display"></span>
+        <button class="btn-secondary" onclick="logout()">Logout</button>
+      </div>
+    </nav>
   </header>
 
   <div class="container">
-    <div class="level-list">
+    
+    <!-- DEMON LIST TAB -->
+    <section id="tab-list" class="tab-content active">
+      <h2 style="margin-bottom: 15px;">Top Demons & Layouts</h2>
+      <div id="levels-container"></div>
+    </section>
 
-      <div class="level-card">
-        <div class="level-info">
-          <span class="rank">#1</span>
-          <div class="details">
-            <h3>Cataclysm Layout</h3>
-            <p>By Viprin | Verified by Riot</p>
-          </div>
-        </div>
-        <div class="meta">
-          <div class="points">100 Pts</div>
-          <div class="level-id">ID: 11111111</div>
+    <!-- PLAYER STATS TAB -->
+    <section id="tab-stats" class="tab-content">
+      <h2 style="margin-bottom: 15px;">Leaderboard & Stats Tracker</h2>
+      <div class="admin-panel">
+        <div class="form-group">
+          <label for="player-select">Select Player Profile:</label>
+          <select id="player-select" onchange="renderPlayerStats()"></select>
         </div>
       </div>
+      <div id="player-profile-card"></div>
+    </section>
 
-      <div class="level-card">
-        <div class="level-info">
-          <span class="rank">#2</span>
-          <div class="details">
-            <h3>Problematic</h3>
-            <p>By Darnoc | Verified by Darnoc</p>
-          </div>
-        </div>
-        <div class="meta">
-          <div class="points">90 Pts</div>
-          <div class="level-id">ID: 10163300</div>
-        </div>
+    <!-- ADMIN PANEL TAB -->
+    <section id="tab-admin" class="tab-content">
+      <h2>Admin Dashboard</h2>
+      
+      <div class="admin-panel" style="margin-top: 15px;">
+        <h3>Add New Level</h3>
+        <form onsubmit="handleAddLevel(event)" style="margin-top: 10px;">
+          <div class="form-group"><label>Level Name</label><input type="text" id="nl-name" required></div>
+          <div class="form-group"><label>Creator</label><input type="text" id="nl-creator" required></div>
+          <div class="form-group"><label>Verifier</label><input type="text" id="nl-verifier" required></div>
+          <div class="form-group"><label>Level ID</label><input type="text" id="nl-id" required></div>
+          <div class="form-group"><label>Points</label><input type="number" id="nl-points" required></div>
+          <button type="submit">Add to List</button>
+        </form>
       </div>
 
-      <div class="level-card">
-        <div class="level-info">
-          <span class="rank">#3</span>
-          <div class="details">
-            <h3>The Nightmare</h3>
-            <p>By Jax | Verified by Jax</p>
-          </div>
-        </div>
-        <div class="meta">
-          <div class="points">80 Pts</div>
-          <div class="level-id">ID: 13519</div>
-        </div>
+      <div class="admin-panel">
+        <h3>Site Customization</h3>
+        <form onsubmit="handleSiteSettings(event)" style="margin-top: 10px;">
+          <div class="form-group"><label>List Title</label><input type="text" id="set-title"></div>
+          <div class="form-group"><label>Subtitle</label><input type="text" id="set-subtitle"></div>
+          <button type="submit">Save Changes</button>
+        </form>
       </div>
 
+      <div class="admin-panel">
+        <h3>Manage Roles</h3>
+        <div class="form-group">
+          <label>Select User to Make Admin:</label>
+          <select id="admin-user-select"></select>
+        </div>
+        <button onclick="makeUserAdmin()">Promote to Admin</button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- AUTH MODAL -->
+  <div id="auth-modal" class="modal">
+    <div class="modal-content">
+      <h2 id="modal-title" style="margin-bottom: 15px;">Login</h2>
+      <form onsubmit="handleAuth(event)">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="auth-username" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="auth-password" required>
+        </div>
+        <button type="submit" style="width: 100%; margin-top: 10px;">Submit</button>
+      </form>
+      <button class="btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeAuthModal()">Cancel</button>
     </div>
   </div>
 
+  <script>
+    // Initial State Setup
+    const defaultData = {
+      settings: { title: "Layout & Easy Demonlist", subtitle: "Official rankings and player stat tracker" },
+      users: [
+        { username: "admin", password: "123", role: "admin", completed: ["Cataclysm Layout", "Problematic"] },
+        { username: "Player1", password: "123", role: "user", completed: ["Problematic", "The Nightmare"] }
+      ],
+      levels: [
+        { rank: 1, name: "Cataclysm Layout", creator: "Viprin", verifier: "Riot", points: 100, id: "11111111" },
+        { rank: 2, name: "Problematic", creator: "Darnoc", verifier: "Darnoc", points: 90, id: "10163300" },
+        { rank: 3, name: "The Nightmare", creator: "Jax", verifier: "Jax", points: 80, id: "13519" }
+      ]
+    };
+
+    let state = JSON.parse(localStorage.getItem('gd_demonlist_data')) || defaultData;
+    let currentUser = JSON.parse(localStorage.getItem('gd_demonlist_session')) || null;
+    let authMode = 'login';
+
+    function saveData() {
+      localStorage.setItem('gd_demonlist_data', JSON.stringify(state));
+    }
+
+    function init() {
+      document.getElementById('site-title').innerText = state.settings.title;
+      document.getElementById('site-subtitle').innerText = state.settings.subtitle;
+      renderLevels();
+      updateAuthUI();
+      populateUserDropdowns();
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      if(tabName === 'stats') renderPlayerStats();
+    }
+
+    function changeTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    function renderLevels() {
+      const container = document.getElementById('levels-container');
+      container.innerHTML = state.levels.map(level => `
+        <div class="level-card">
+          <div style="display:flex; align-items:center; gap:15px;">
+            <span class="rank">#${level.rank}</span>
+            <div class="details">
+              <h3>${level.name}</h3>
+              <p>By ${level.creator} | Verified by ${level.verifier}</p>
+            </div>
+          </div>
+          <div class="meta">
+            <div class="points">${level.points} Pts</div>
+            <div class="details"><p>ID: ${level.id}</p></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* Auth Logic */
+    function openAuthModal(mode) {
+      authMode = mode;
+      document.getElementById('modal-title').innerText = mode === 'login' ? 'Login' : 'Sign Up';
+      document.getElementById('auth-modal').classList.add('active');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('auth-modal').classList.remove('active');
+    }
+
+    function handleAuth(e) {
+      e.preventDefault();
+      const u = document.getElementById('auth-username').value;
+      const p = document.getElementById('auth-password').value;
+
+      if(authMode === 'signup') {
+        if(state.users.find(user => user.username === u)) return alert('Username taken!');
+        const newUser = { username: u, password: p, role: 'user', completed: [] };
+        state.users.push(newUser);
+        currentUser = newUser;
+        saveData();
+      } else {
+        const user = state.users.find(user => user.username === u && user.password === p);
+        if(!user) return alert('Invalid credentials!');
+        currentUser = user;
+      }
+
+      localStorage.setItem('gd_demonlist_session', JSON.stringify(currentUser));
+      closeAuthModal();
+      updateAuthUI();
+      populateUserDropdowns();
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('gd_demonlist_session');
+      updateAuthUI();
+      switchTab('list');
+    }
+
+    function updateAuthUI() {
+      if(currentUser) {
+        document.getElementById('auth-buttons').style.display = 'none';
+        document.getElementById('user-info').style.display = 'block';
+        document.getElementById('user-display').innerHTML = `${currentUser.username} ${currentUser.role === 'admin' ? '<span class="badge-admin">ADMIN</span>' : ''}`;
+        document.getElementById('admin-nav-btn').style.display = currentUser.role === 'admin' ? 'inline-block' : 'none';
+      } else {
+        document.getElementById('auth-buttons').style.display = 'block';
+        document.getElementById('user-info').style.display = 'none';
+        document.getElementById('admin-nav-btn').style.display = 'none';
+      }
+    }
+
+    /* Stats Tracker */
+    function populateUserDropdowns() {
+      const pSelect = document.getElementById('player-select');
+      const aSelect = document.getElementById('admin-user-select');
+      
+      const options = state.users.map(u => `<option value="${u.username}">${u.username}</option>`).join('');
+      pSelect.innerHTML = options;
+      aSelect.innerHTML = options;
+    }
+
+    function renderPlayerStats() {
+      const username = document.getElementById('player-select').value;
+      const user = state.users.find(u => u.username === username);
+      if(!user) return;
+
+      let totalPoints = 0;
+      user.completed.forEach(lvlName => {
+        const lvl = state.levels.find(l => l.name === lvlName);
+        if(lvl) totalPoints += lvl.points;
+      });
+
+      document.getElementById('player-profile-card').innerHTML = `
+        <div class="stat-card">
+          <div>
+            <h3>${user.username}</h3>
+            <p>Completed: ${user.completed.join(', ') || 'None'}</p>
+          </div>
+          <div class="meta">
+            <div class="points">${totalPoints} Total Points</div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* Admin Handlers */
+    function handleAddLevel(e) {
+      e.preventDefault();
+      const newLvl = {
+        rank: state.levels.length + 1,
+        name: document.getElementById('nl-name').value,
+        creator: document.getElementById('nl-creator').value,
+        verifier: document.getElementById('nl-verifier').value,
+        id: document.getElementById('nl-id').value,
+        points: parseInt(document.getElementById('nl-points').value)
+      };
+      state.levels.push(newLvl);
+      saveData();
+      renderLevels();
+      alert('Level added successfully!');
+    }
+
+    function handleSiteSettings(e) {
+      e.preventDefault();
+      const title = document.getElementById('set-title').value;
+      const sub = document.getElementById('set-subtitle').value;
+      if(title) state.settings.title = title;
+      if(sub) state.settings.subtitle = sub;
+      saveData();
+      init();
+      alert('Settings updated!');
+    }
+
+    function makeUserAdmin() {
+      const username = document.getElementById('admin-user-select').value;
+      const user = state.users.find(u => u.username === username);
+      if(user) {
+        user.role = 'admin';
+        saveData();
+        alert(`${username} is now an admin!`);
+      }
+    }
+
+    // Initialize App
+    init();
+  </script>
 </body>
 </html>
