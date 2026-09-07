@@ -33,41 +33,41 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text); transition: all 0.3s ease; }
+    body { font-family: Arial, sans-serif; background-color: var(--bg-color); color: var(--text); padding-bottom: 40px; }
     
-    header { background: var(--card-bg); padding: 15px 30px; border-bottom: 3px solid var(--accent); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-    .brand h1 { font-size: 1.6rem; color: var(--accent); }
-    .brand p { font-size: 0.85rem; color: var(--text-dim); }
+    /* Header & Navigation Bar */
+    header { background: var(--card-bg); padding: 15px 20px; border-bottom: 3px solid var(--accent); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .brand h1 { font-size: 1.5rem; color: var(--accent); }
+    .brand p { font-size: 0.8rem; color: var(--text-dim); }
 
-    nav { display: flex; gap: 10px; align-items: center; }
-    button, .btn { background: var(--accent); color: #fff; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
-    button:hover { opacity: 0.85; }
-    .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .nav-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     
-    .container { max-width: 1000px; margin: 25px auto; padding: 0 15px; }
+    button, select { background: var(--accent); color: #fff; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+    button:hover { opacity: 0.85; }
+    .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--text); }
+    .btn-admin { background: #e91e63; }
+    
+    .container { max-width: 900px; margin: 25px auto; padding: 0 15px; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Cards & Lists */
-    .level-card, .stat-card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 15px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-    .rank { font-size: 1.4rem; font-weight: bold; color: var(--accent); width: 45px; }
-    .details h3 { margin-bottom: 4px; }
+    /* Cards */
+    .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 15px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .rank { font-size: 1.3rem; font-weight: bold; color: var(--accent); width: 40px; }
+    .details h3 { margin-bottom: 4px; font-size: 1rem; }
     .details p { font-size: 0.85rem; color: var(--text-dim); }
-    .meta { text-align: right; }
     .points { font-weight: bold; color: var(--accent); }
 
-    /* Admin & Forms */
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-dim); }
-    .form-group input, .form-group select { width: 100%; padding: 10px; background: var(--bg-color); border: 1px solid var(--border); color: var(--text); border-radius: 5px; }
-    .admin-panel, .auth-box { background: var(--card-bg); border: 1px solid var(--border); padding: 25px; border-radius: 8px; margin-bottom: 20px; }
+    /* Admin Panel Form */
+    .panel { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 6px; margin-bottom: 20px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; margin-bottom: 4px; font-size: 0.85rem; color: var(--text-dim); }
+    .form-group input, .form-group select { width: 100%; padding: 8px; background: var(--bg-color); border: 1px solid var(--border); color: var(--text); border-radius: 4px; }
 
-    /* Modal */
+    /* Modals */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
     .modal.active { display: flex; }
-    .modal-content { background: var(--card-bg); padding: 30px; border-radius: 8px; width: 100%; max-width: 400px; border: 1px solid var(--border); }
-    
-    .badge-admin { background: #e91e63; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; vertical-align: middle; }
+    .modal-content { background: var(--card-bg); padding: 25px; border-radius: 6px; width: 100%; max-width: 350px; border: 1px solid var(--border); }
   </style>
 </head>
 <body>
@@ -75,110 +75,108 @@
   <header>
     <div class="brand">
       <h1 id="site-title">Layout & Easy Demonlist</h1>
-      <p id="site-subtitle">Official rankings and player stat tracker</p>
+      <p id="site-subtitle">Official rankings and player stats</p>
     </div>
-    <nav>
-      <button class="btn-secondary" onclick="switchTab('list')">Demon List</button>
-      <button class="btn-secondary" onclick="switchTab('stats')">Player Stats</button>
-      <button id="admin-nav-btn" class="btn-secondary" style="display:none;" onclick="switchTab('admin')">Admin Panel</button>
+
+    <div class="nav-group">
+      <!-- Navigation Tabs -->
+      <button onclick="switchTab('list')">Demon List</button>
+      <button class="btn-outline" onclick="switchTab('stats')">Player Stats</button>
+      <button id="admin-tab-btn" class="btn-admin" onclick="switchTab('admin')">Admin Panel</button>
       
-      <select id="theme-select" class="btn-secondary" onchange="changeTheme(this.value)">
+      <!-- Theme Switcher -->
+      <select id="theme-select" onchange="changeTheme(this.value)">
         <option value="dark">Dark Theme</option>
         <option value="light">Light Theme</option>
         <option value="cyberpunk">Cyberpunk</option>
       </select>
 
-      <div id="auth-buttons">
-        <button onclick="openAuthModal('login')">Login</button>
-        <button class="btn-secondary" onclick="openAuthModal('signup')">Sign Up</button>
+      <!-- Auth State Controls -->
+      <div id="auth-buttons" style="display:none;">
+        <button class="btn-outline" onclick="openAuthModal('login')">Log In</button>
+        <button onclick="openAuthModal('signup')">Sign Up</button>
       </div>
-      <div id="user-info" style="display:none;">
-        <span id="user-display"></span>
-        <button class="btn-secondary" onclick="logout()">Logout</button>
+      <div id="user-info">
+        <span id="user-display" style="font-size: 0.85rem; font-weight: bold;"></span>
+        <button class="btn-outline" onclick="logout()">Logout</button>
       </div>
-    </nav>
+    </div>
   </header>
 
   <div class="container">
-    
+
     <!-- DEMON LIST TAB -->
     <section id="tab-list" class="tab-content active">
-      <h2 style="margin-bottom: 15px;">Top Demons & Layouts</h2>
+      <h2 style="margin-bottom: 15px;">Demon Rankings</h2>
       <div id="levels-container"></div>
     </section>
 
     <!-- PLAYER STATS TAB -->
     <section id="tab-stats" class="tab-content">
-      <h2 style="margin-bottom: 15px;">Leaderboard & Stats Tracker</h2>
-      <div class="admin-panel">
+      <h2 style="margin-bottom: 15px;">Player Stats Tracker</h2>
+      <div class="panel">
         <div class="form-group">
-          <label for="player-select">Select Player Profile:</label>
+          <label>Select Registered Player:</label>
           <select id="player-select" onchange="renderPlayerStats()"></select>
         </div>
       </div>
-      <div id="player-profile-card"></div>
+      <div id="player-profile"></div>
     </section>
 
     <!-- ADMIN PANEL TAB -->
     <section id="tab-admin" class="tab-content">
-      <h2>Admin Dashboard</h2>
+      <h2>Admin Control Panel</h2>
+      <p style="color: var(--text-dim); margin-bottom: 15px; font-size: 0.9rem;">Manage list entries, customization, and user permissions.</p>
       
-      <div class="admin-panel" style="margin-top: 15px;">
-        <h3>Add New Level</h3>
-        <form onsubmit="handleAddLevel(event)" style="margin-top: 10px;">
+      <div class="panel">
+        <h3>Add New Level to List</h3>
+        <form onsubmit="handleAddLevel(event)">
           <div class="form-group"><label>Level Name</label><input type="text" id="nl-name" required></div>
           <div class="form-group"><label>Creator</label><input type="text" id="nl-creator" required></div>
           <div class="form-group"><label>Verifier</label><input type="text" id="nl-verifier" required></div>
           <div class="form-group"><label>Level ID</label><input type="text" id="nl-id" required></div>
-          <div class="form-group"><label>Points</label><input type="number" id="nl-points" required></div>
-          <button type="submit">Add to List</button>
+          <div class="form-group"><label>Points Value</label><input type="number" id="nl-points" required></div>
+          <button type="submit">Add Level</button>
         </form>
       </div>
 
-      <div class="admin-panel">
-        <h3>Site Customization</h3>
-        <form onsubmit="handleSiteSettings(event)" style="margin-top: 10px;">
-          <div class="form-group"><label>List Title</label><input type="text" id="set-title"></div>
-          <div class="form-group"><label>Subtitle</label><input type="text" id="set-subtitle"></div>
-          <button type="submit">Save Changes</button>
+      <div class="panel">
+        <h3>Site Title Customization</h3>
+        <form onsubmit="handleSiteSettings(event)">
+          <div class="form-group"><label>Custom Site Name</label><input type="text" id="set-title"></div>
+          <div class="form-group"><label>Custom Subtitle</label><input type="text" id="set-subtitle"></div>
+          <button type="submit">Update Title</button>
         </form>
       </div>
 
-      <div class="admin-panel">
-        <h3>Manage Roles</h3>
+      <div class="panel">
+        <h3>User Role Management</h3>
         <div class="form-group">
-          <label>Select User to Make Admin:</label>
+          <label>Promote User to Admin:</label>
           <select id="admin-user-select"></select>
         </div>
-        <button onclick="makeUserAdmin()">Promote to Admin</button>
+        <button class="btn-admin" onclick="makeUserAdmin()">Promote Selected User</button>
       </div>
     </section>
 
   </div>
 
-  <!-- AUTH MODAL -->
+  <!-- LOGIN / SIGNUP MODAL -->
   <div id="auth-modal" class="modal">
     <div class="modal-content">
-      <h2 id="modal-title" style="margin-bottom: 15px;">Login</h2>
+      <h3 id="modal-title" style="margin-bottom: 15px;">Login</h3>
       <form onsubmit="handleAuth(event)">
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="auth-username" required>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="auth-password" required>
-        </div>
-        <button type="submit" style="width: 100%; margin-top: 10px;">Submit</button>
+        <div class="form-group"><label>Username</label><input type="text" id="auth-username" required></div>
+        <div class="form-group"><label>Password</label><input type="password" id="auth-password" required></div>
+        <button type="submit" style="width: 100%;">Submit</button>
       </form>
-      <button class="btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeAuthModal()">Cancel</button>
+      <button class="btn-outline" style="width: 100%; margin-top: 8px;" onclick="closeAuthModal()">Close</button>
     </div>
   </div>
 
   <script>
-    // Initial State Setup
     const defaultData = {
-      settings: { title: "Layout & Easy Demonlist", subtitle: "Official rankings and player stat tracker" },
+      settings: { title: "Layout & Easy Demonlist", subtitle: "Official rankings and player stats" },
       users: [
         { username: "admin", password: "123", role: "admin", completed: ["Cataclysm Layout", "Problematic"] },
         { username: "Player1", password: "123", role: "user", completed: ["Problematic", "The Nightmare"] }
@@ -190,12 +188,13 @@
       ]
     };
 
-    let state = JSON.parse(localStorage.getItem('gd_demonlist_data')) || defaultData;
-    let currentUser = JSON.parse(localStorage.getItem('gd_demonlist_session')) || null;
+    let state = JSON.parse(localStorage.getItem('gd_list_data')) || defaultData;
+    // Default automatically logs in as 'admin' so all features are visible right away
+    let currentUser = JSON.parse(localStorage.getItem('gd_list_session')) || state.users[0];
     let authMode = 'login';
 
     function saveData() {
-      localStorage.setItem('gd_demonlist_data', JSON.stringify(state));
+      localStorage.setItem('gd_list_data', JSON.stringify(state));
     }
 
     function init() {
@@ -203,13 +202,13 @@
       document.getElementById('site-subtitle').innerText = state.settings.subtitle;
       renderLevels();
       updateAuthUI();
-      populateUserDropdowns();
+      populateDropdowns();
     }
 
-    function switchTab(tabName) {
+    function switchTab(tab) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.getElementById(`tab-${tabName}`).classList.add('active');
-      if(tabName === 'stats') renderPlayerStats();
+      document.getElementById(`tab-${tab}`).classList.add('active');
+      if(tab === 'stats') renderPlayerStats();
     }
 
     function changeTheme(theme) {
@@ -217,17 +216,16 @@
     }
 
     function renderLevels() {
-      const container = document.getElementById('levels-container');
-      container.innerHTML = state.levels.map(level => `
-        <div class="level-card">
-          <div style="display:flex; align-items:center; gap:15px;">
+      document.getElementById('levels-container').innerHTML = state.levels.map(level => `
+        <div class="card">
+          <div style="display:flex; align-items:center;">
             <span class="rank">#${level.rank}</span>
             <div class="details">
               <h3>${level.name}</h3>
-              <p>By ${level.creator} | Verified by ${level.verifier}</p>
+              <p>By ${level.creator} | Verifier: ${level.verifier}</p>
             </div>
           </div>
-          <div class="meta">
+          <div style="text-align:right;">
             <div class="points">${level.points} Pts</div>
             <div class="details"><p>ID: ${level.id}</p></div>
           </div>
@@ -235,7 +233,22 @@
       `).join('');
     }
 
-    /* Auth Logic */
+    function updateAuthUI() {
+      if(currentUser) {
+        document.getElementById('auth-buttons').style.display = 'none';
+        document.getElementById('user-info').style.display = 'flex';
+        document.getElementById('user-info').style.gap = '8px';
+        document.getElementById('user-info').style.alignItems = 'center';
+        document.getElementById('user-display').innerText = `${currentUser.username} (${currentUser.role})`;
+        document.getElementById('admin-tab-btn').style.display = currentUser.role === 'admin' ? 'inline-block' : 'none';
+      } else {
+        document.getElementById('auth-buttons').style.display = 'flex';
+        document.getElementById('auth-buttons').style.gap = '8px';
+        document.getElementById('user-info').style.display = 'none';
+        document.getElementById('admin-tab-btn').style.display = 'none';
+      }
+    }
+
     function openAuthModal(mode) {
       authMode = mode;
       document.getElementById('modal-title').innerText = mode === 'login' ? 'Login' : 'Sign Up';
@@ -252,51 +265,34 @@
       const p = document.getElementById('auth-password').value;
 
       if(authMode === 'signup') {
-        if(state.users.find(user => user.username === u)) return alert('Username taken!');
+        if(state.users.find(x => x.username === u)) return alert('Username already exists!');
         const newUser = { username: u, password: p, role: 'user', completed: [] };
         state.users.push(newUser);
         currentUser = newUser;
-        saveData();
       } else {
-        const user = state.users.find(user => user.username === u && user.password === p);
+        const user = state.users.find(x => x.username === u && x.password === p);
         if(!user) return alert('Invalid credentials!');
         currentUser = user;
       }
 
-      localStorage.setItem('gd_demonlist_session', JSON.stringify(currentUser));
+      saveData();
+      localStorage.setItem('gd_list_session', JSON.stringify(currentUser));
       closeAuthModal();
       updateAuthUI();
-      populateUserDropdowns();
+      populateDropdowns();
     }
 
     function logout() {
       currentUser = null;
-      localStorage.removeItem('gd_demonlist_session');
+      localStorage.removeItem('gd_list_session');
       updateAuthUI();
       switchTab('list');
     }
 
-    function updateAuthUI() {
-      if(currentUser) {
-        document.getElementById('auth-buttons').style.display = 'none';
-        document.getElementById('user-info').style.display = 'block';
-        document.getElementById('user-display').innerHTML = `${currentUser.username} ${currentUser.role === 'admin' ? '<span class="badge-admin">ADMIN</span>' : ''}`;
-        document.getElementById('admin-nav-btn').style.display = currentUser.role === 'admin' ? 'inline-block' : 'none';
-      } else {
-        document.getElementById('auth-buttons').style.display = 'block';
-        document.getElementById('user-info').style.display = 'none';
-        document.getElementById('admin-nav-btn').style.display = 'none';
-      }
-    }
-
-    /* Stats Tracker */
-    function populateUserDropdowns() {
-      const pSelect = document.getElementById('player-select');
-      const aSelect = document.getElementById('admin-user-select');
-      
+    function populateDropdowns() {
       const options = state.users.map(u => `<option value="${u.username}">${u.username}</option>`).join('');
-      pSelect.innerHTML = options;
-      aSelect.innerHTML = options;
+      document.getElementById('player-select').innerHTML = options;
+      document.getElementById('admin-user-select').innerHTML = options;
     }
 
     function renderPlayerStats() {
@@ -304,64 +300,59 @@
       const user = state.users.find(u => u.username === username);
       if(!user) return;
 
-      let totalPoints = 0;
+      let score = 0;
       user.completed.forEach(lvlName => {
-        const lvl = state.levels.find(l => l.name === lvlName);
-        if(lvl) totalPoints += lvl.points;
+        const match = state.levels.find(l => l.name === lvlName);
+        if(match) score += match.points;
       });
 
-      document.getElementById('player-profile-card').innerHTML = `
-        <div class="stat-card">
+      document.getElementById('player-profile').innerHTML = `
+        <div class="card">
           <div>
             <h3>${user.username}</h3>
-            <p>Completed: ${user.completed.join(', ') || 'None'}</p>
+            <p class="details">Completed: ${user.completed.join(', ') || 'No records'}</p>
           </div>
-          <div class="meta">
-            <div class="points">${totalPoints} Total Points</div>
-          </div>
+          <div class="points">${score} Points</div>
         </div>
       `;
     }
 
-    /* Admin Handlers */
     function handleAddLevel(e) {
       e.preventDefault();
-      const newLvl = {
+      state.levels.push({
         rank: state.levels.length + 1,
         name: document.getElementById('nl-name').value,
         creator: document.getElementById('nl-creator').value,
         verifier: document.getElementById('nl-verifier').value,
         id: document.getElementById('nl-id').value,
         points: parseInt(document.getElementById('nl-points').value)
-      };
-      state.levels.push(newLvl);
+      });
       saveData();
       renderLevels();
-      alert('Level added successfully!');
+      alert('Level added!');
     }
 
     function handleSiteSettings(e) {
       e.preventDefault();
-      const title = document.getElementById('set-title').value;
-      const sub = document.getElementById('set-subtitle').value;
-      if(title) state.settings.title = title;
-      if(sub) state.settings.subtitle = sub;
+      const t = document.getElementById('set-title').value;
+      const s = document.getElementById('set-subtitle').value;
+      if(t) state.settings.title = t;
+      if(s) state.settings.subtitle = s;
       saveData();
       init();
-      alert('Settings updated!');
+      alert('Site title updated!');
     }
 
     function makeUserAdmin() {
-      const username = document.getElementById('admin-user-select').value;
-      const user = state.users.find(u => u.username === username);
+      const u = document.getElementById('admin-user-select').value;
+      const user = state.users.find(x => x.username === u);
       if(user) {
         user.role = 'admin';
         saveData();
-        alert(`${username} is now an admin!`);
+        alert(`${u} upgraded to admin!`);
       }
     }
 
-    // Initialize App
     init();
   </script>
 </body>
